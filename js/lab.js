@@ -1,14 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     const videoPlayer = document.getElementById('lab-video-player');
-    const playlistContainer = document.getElementById('playlist-container');
     const titleHUD = document.getElementById('current-video-title');
     const photoGrid = document.getElementById('photo-gallery-grid');
     const photoStats = document.getElementById('photo-stats');
     
-    // Toggle Menu elements
-    const toggleBtn = document.getElementById('toggle-playlist');
-    const playlistPanel = document.getElementById('compact-playlist-panel');
-
     // Modal elements
     const modal = document.getElementById('photo-modal');
     const modalImg = document.getElementById('modal-img');
@@ -18,34 +13,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let videoPlaylist = [];
     let photoPlaylist = [];
-    let currentVideoIndex = 0;
+    let currentVideoIndex = -1;
     let currentPhotoIndexInModal = 0;
 
     const MAX_ITEMS = 1000;
     const VIDEO_DIR = 'videos/';
     const PHOTO_DIR = 'photos/';
 
-    // Toggle Playlist Menu
-    if (toggleBtn) {
-        toggleBtn.addEventListener('click', () => {
-            playlistPanel.classList.toggle('hidden');
-        });
-    }
-
     async function probeFiles() {
         console.log("Loading archive contents...");
         
         // 1. Probe Videos (Sequential)
-        playlistContainer.innerHTML = '<div class="loading-feed">SCANNING...</div>';
         videoPlaylist = await findSequentialFiles(VIDEO_DIR, ['mp4', 'mov'], 1, MAX_ITEMS);
         
-        if (videoPlaylist.length === 0) {
-            playlistContainer.innerHTML = '<div class="loading-feed" style="color:var(--neon-red)">EMPTY</div>';
-        } else {
-            renderPlaylist();
-            if (!videoPlayer.src || videoPlayer.src === "") {
-                playVideo(0);
-            }
+        if (videoPlaylist.length > 0) {
+            playRandomVideo();
         }
 
         // 2. Probe Photos (Sequential)
@@ -63,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let found = [];
         let p = start;
         let consecutiveFails = 0;
-        const MAX_CONSECUTIVE_FAILS = 5; // Allow some gaps in naming
+        const MAX_CONSECUTIVE_FAILS = 5;
 
         while(p <= max && consecutiveFails < MAX_CONSECUTIVE_FAILS) {
             let foundInStep = false;
@@ -73,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (res.exists) {
                     found.push({ id: res.id, url: res.url });
                     foundInStep = true;
-                    consecutiveFails = 0; // Reset on success
+                    consecutiveFails = 0;
                     break;
                 }
             }
@@ -93,44 +75,28 @@ document.addEventListener('DOMContentLoaded', () => {
         return { exists: false };
     }
 
-    function renderPlaylist() {
-        playlistContainer.innerHTML = '';
-        videoPlaylist.forEach((video, index) => {
-            const item = document.createElement('div');
-            item.className = 'playlist-item';
-            item.dataset.index = index;
-            item.innerHTML = `FILE #${video.id}`;
-            item.addEventListener('click', () => {
-                playVideo(index);
-                playlistPanel.classList.add('hidden'); // Close menu on select
-            });
-            playlistContainer.appendChild(item);
-        });
-    }
-
-    function playVideo(index) {
-        if (index < 0 || index >= videoPlaylist.length) return;
-        currentVideoIndex = index;
-        const video = videoPlaylist[index];
-        document.querySelectorAll('.playlist-item').forEach(el => el.classList.remove('active'));
-        const activeItem = document.querySelector(`.playlist-item[data-index="${index}"]`);
-        if (activeItem) {
-            activeItem.classList.add('active');
+    function playRandomVideo() {
+        if (videoPlaylist.length === 0) return;
+        
+        let newIndex = Math.floor(Math.random() * videoPlaylist.length);
+        // Try to avoid playing the same video twice in a row if possible
+        if (newIndex === currentVideoIndex && videoPlaylist.length > 1) {
+            newIndex = (newIndex + 1) % videoPlaylist.length;
         }
+        
+        currentVideoIndex = newIndex;
+        const video = videoPlaylist[currentVideoIndex];
+        
         videoPlayer.src = video.url;
         videoPlayer.play().catch(e => console.error("Play error", e));
-        titleHUD.textContent = `FILE: ${video.id}.MP4`;
+        titleHUD.textContent = `RANDOM PLAY: FILE #${video.id}`;
     }
 
-    videoPlayer.addEventListener('ended', () => {
-        let nextIndex = currentVideoIndex + 1;
-        if (nextIndex < videoPlaylist.length) playVideo(nextIndex);
-        else playVideo(0);
-    });
+    videoPlayer.addEventListener('ended', playRandomVideo);
 
     function renderGallery() {
         photoGrid.innerHTML = '';
-        photoStats.textContent = `Total: ${photoPlaylist.length}`;
+        photoStats.textContent = `Total Items: ${photoPlaylist.length}`;
         photoPlaylist.forEach((photo, index) => {
             const item = document.createElement('div');
             item.className = 'lab-photo-item';
@@ -170,10 +136,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     window.addEventListener('click', (e) => { 
         if (e.target === modal) closeModal(); 
-        // Close playlist if clicked outside
-        if (playlistPanel && !playlistPanel.contains(e.target) && e.target !== toggleBtn) {
-            playlistPanel.classList.add('hidden');
-        }
     });
 
     window.addEventListener('keydown', (e) => { 
@@ -185,5 +147,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     probeFiles();
-    // Removed setInterval(probeFiles, 120000); // User requested to remove auto-refresh
 });
