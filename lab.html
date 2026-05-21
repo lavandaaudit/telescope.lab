@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IBONARIUM SUNSET LAB</title>
+    <!-- Use existing styles plus lab-specific ones -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/lab.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="sitdeck-container">
+        <!-- Header -->
+        <header class="top-hud">
+            <div class="logo-area">
+                <h1>IBONARIUM <span>SUNSET.LAB</span></h1>
+                <div class="status-indicator">
+                    <span class="pulse"></span> ЛОКАЛЬНИЙ АРХІВ
+                </div>
+            </div>
+            <div class="global-stats">
+                <a href="index.html" class="nav-btn">← НА ГОЛОВНУ</a>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Lab Player Workspace -->
+            <div class="lab-workspace full-width">
+                <!-- Video Player Section -->
+                <section class="video-section lab-player-area">
+                    <div class="video-wrapper glass-frame">
+                        <video id="lab-video-player" controls autoplay muted>
+                        </video>
+                        
+                        <!-- Overlay Controls -->
+                        <div class="video-overlay-hud" id="video-hud">
+                            <div class="hud-top-left">
+                                <div id="current-video-title">FILE: --</div>
+                                <!-- Collapsible Playlist Menu -->
+                                <div class="playlist-wrapper" id="playlist-menu">
+                                    <button id="toggle-playlist" class="mini-btn">МЕНЮ АРХІВУ</button>
+                                    <aside class="compact-playlist hidden" id="compact-playlist-panel">
+                                        <div class="playlist-list" id="playlist-container">
+                                            <div class="loading-feed">ПОШУК ВІДЕО...</div>
+                                        </div>
+                                    </aside>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Gallery Section -->
+        <section class="gallery-section glass-frame" style="margin-top: 20px;">
+            <div class="section-header">
+                <h2>ФОТО АРХІВ САНСЕТІВ</h2>
+                <div class="line-deco"></div>
+                <div style="font-family:'Rajdhani', sans-serif; color:#00f3ff; margin-top:5px;" id="photo-stats">Знайдено: 0</div>
+            </div>
+            <div class="lab-gallery-grid" id="photo-gallery-grid">
+                <div class="loading-feed" style="grid-column: 1 / -1; padding: 40px;">ПОШУК ФОТО ФАЙЛІВ...</div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Photo Modal -->
+    <div id="photo-modal" class="modal photo-only-modal">
+        <span class="modal-close">&times;</span>
+        <div class="modal-nav nav-prev" id="modal-prev">&#10094;</div>
+        <div class="modal-nav nav-next" id="modal-next">&#10095;</div>
+        <div class="modal-content-clean">
+            <img id="modal-img" src="" alt="Archive Photo">
+        </div>
+    </div>
+
+    <script src="js/lab.js"></script>
+</body>
+</html>

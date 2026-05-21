@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IBONARIUM SUNSET - ARCHIVE</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/gallery-fix.css">
+    <link rel="stylesheet" href="css/lab.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="sitdeck-container">
+        <!-- Header -->
+        <header class="top-hud">
+            <div class="logo-area">
+                <h1>IBONARIUM <span>SUNSET telescope</span></h1>
+                <div class="status-indicator">
+                    <span class="pulse"></span> ARCHIVE MODE
+                </div>
+            </div>
+            <div class="global-stats" id="solar-stats">
+                <div class="stat-box">
+                    <span class="label">KP INDEX</span>
+                    <span class="value" id="kp-val">--</span>
+                </div>
+                <div class="stat-box">
+                    <span class="label">SOLAR WIND</span>
+                    <span class="value" id="wind-val">-- km/s</span>
+                </div>
+                <div class="stat-box">
+                    <span class="label">X-RAY FLARES</span>
+                    <span class="value" id="flare-val">--</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <!-- 1. VIDEO ARCHIVE -->
+            <section class="archive-section">
+                <div class="section-header">
+                    <h2>SUNSET telescope ARCHIVE: VIDEO</h2>
+                    <div class="line-deco"></div>
+                </div>
+                <div class="lab-workspace">
+                    <div class="video-section lab-player-area">
+                        <div class="video-wrapper glass-frame">
+                            <video id="lab-video-player" controls muted></video>
+                            <div class="video-overlay-hud">
+                                <div class="hud-top-left" id="current-video-title">FILE: --</div>
+                                <div class="hud-top-right" id="current-video-date">DATE: --</div>
+                            </div>
+                        </div>
+                    </div>
+                    <aside class="playlist-section glass-frame">
+                        <div class="playlist-list" id="playlist-container">
+                            <div class="loading-feed">SCANNING VIDEOS...</div>
+                        </div>
+                    </aside>
+                </div>
+            </section>
+
+            <!-- 2. PHOTO ARCHIVE -->
+            <section class="archive-section" style="margin-top: 20px;">
+                <div class="section-header">
+                    <h2>SUNSET telescope ARCHIVE: PHOTO</h2>
+                    <div class="line-deco"></div>
+                    <div id="photo-stats" style="font-family:'Rajdhani', sans-serif; color:#00f3ff; margin-top:5px;">Found: 0</div>
+                </div>
+                <div class="lab-gallery-grid" id="photo-gallery-grid">
+                    <div class="loading-feed" style="grid-column: 1 / -1; padding: 40px;">SCANNING PHOTOS...</div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Photo Modal -->
+    <div id="photo-modal" class="modal">
+        <span class="modal-close">&times;</span>
+        <div class="modal-nav nav-prev" id="modal-prev">&#10094;</div>
+        <div class="modal-nav nav-next" id="modal-next">&#10095;</div>
+        <div class="modal-content">
+            <img id="modal-img" src="" alt="Enlarged Sunset">
+            <div class="modal-caption" id="modal-caption">--</div>
+            <div id="modal-counter" style="position:absolute; bottom:-30px; left:50%; transform:translateX(-50%); color:#fff; font-family:'Rajdhani';">0 / 0</div>
+        </div>
+    </div>
+
+    <script src="js/solar.js"></script>
+    <script src="js/lab.js"></script>
+
+</body>
+</html>
